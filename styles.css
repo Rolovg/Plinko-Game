@@ -30,7 +30,6 @@ p {
 }
 
 #game {
-  position: relative;
   display: inline-block;
 }
 
@@ -57,17 +56,4 @@ button {
 
 button:hover {
   background-color: #ee5253;
-}
-
-#game::before {
-  content: "";
-  position: absolute;
-  top: 95%;
-  left: 0;
-  right: 0;
-  height: 30px;
-  background: #888;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  opacity: 0.8;
 }
