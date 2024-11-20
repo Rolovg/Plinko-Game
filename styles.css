@@ -57,3 +57,9 @@ button {
 button:hover {
   background-color: #ee5253;
 }
+
+#score {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: yellow;
+}
