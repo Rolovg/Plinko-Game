@@ -1,5 +1,6 @@
 const canvas = document.getElementById('plinkoCanvas');
 const ctx = canvas.getContext('2d');
+const scoreElement = document.getElementById('score');
 
 canvas.width = 400;
 canvas.height = 600;
@@ -7,10 +8,12 @@ canvas.height = 600;
 const pegs = [];
 const balls = [];
 const slots = [];
+const multipliers = [];
 const ballRadius = 8;
 const pegRadius = 5;
 const gravity = 0.1;
 const bounceFactor = 0.7;
+let score = 100;
 
 // Set up peg positions in a triangle grid pattern
 function setupPegs() {
@@ -40,19 +43,23 @@ function drawPegs() {
   });
 }
 
-// Draw slots at the bottom
+// Set up slots and assign multipliers
 function setupSlots() {
   const slotCount = 10;
   const slotWidth = canvas.width / slotCount;
   for (let i = 0; i < slotCount; i++) {
     slots.push({ x: i * slotWidth, width: slotWidth });
+    multipliers.push(Math.floor(Math.random() * 5) + 1); // Random multiplier between 1 and 5
   }
 }
 
 function drawSlots() {
   ctx.fillStyle = 'gray';
-  slots.forEach(slot => {
+  slots.forEach((slot, index) => {
     ctx.fillRect(slot.x, canvas.height - 30, slot.width, 30);
+    ctx.fillStyle = 'blue';
+    ctx.font = '16px Arial';
+    ctx.fillText(`x${multipliers[index]}`, slot.x + slot.width / 2 - 10, canvas.height - 35);
   });
 }
 
@@ -65,7 +72,7 @@ function drawBall(ball) {
 
 // Update ball physics and handle collisions
 function updateBall(ball) {
-  ball.vy += gravity;  // Apply gravity
+  ball.vy += gravity; // Apply gravity
   ball.x += ball.vx;
   ball.y += ball.vy;
 
@@ -81,40 +88,6 @@ function updateBall(ball) {
     }
   });
 
-  
+  // Collision with walls
   if (ball.x < ballRadius || ball.x > canvas.width - ballRadius) {
-    ball.vx *= -1;  
-  }
-
-
-  if (ball.y + ballRadius > canvas.height - 30) {
-    ball.vy = 0;
-    ball.vx = 0;
-    ball.y = canvas.height - 30 - ballRadius;  
-  }
-}
-
-function dropBall() {
-  const ball = {
-    x: canvas.width / 2,
-    y: ballRadius,
-    vx: Math.random() * 2 - 1,  
-    vy: 0
-  };
-  balls.push(ball);
-}
-
-function update() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawPegs();
-  drawSlots();
-  balls.forEach(ball => {
-    updateBall(ball);
-    drawBall(ball);
-  });
-  requestAnimationFrame(update);
-}
-
-setupPegs();
-setupSlots();
-update();
+    ball.vx *= -1
