@@ -14,6 +14,7 @@ const bounceFactor = 0.6;
 const slotCount = 10;
 let score = 100;
 
+const multipliers = [0.5, 1, 1.5, 2, 3, 4, 3, 2, 1.5, 1];
 
 function setupPegs() {
   const rows = 12;
@@ -32,7 +33,6 @@ function setupPegs() {
   }
 }
 
-
 function drawPegs() {
   ctx.fillStyle = "white";
   pegs.forEach((peg) => {
@@ -42,24 +42,21 @@ function drawPegs() {
   });
 }
 
-
 function setupSlots() {
   const slotWidth = canvas.width / slotCount;
   for (let i = 0; i < slotCount; i++) {
     slots.push({
       x: i * slotWidth,
       width: slotWidth,
-      multiplier: i + 1
+      multiplier: multipliers[i]
     });
   }
 }
 
-
 function drawSlots() {
-  slots.forEach((slot, i) => {
-    ctx.fillStyle = i % 2 === 0 ? "#f39c12" : "#e74c3c";
+  slots.forEach((slot) => {
+    ctx.fillStyle = "#444";
     ctx.fillRect(slot.x, canvas.height - 30, slot.width, 30);
-
 
     ctx.fillStyle = "white";
     ctx.font = "14px Arial";
@@ -71,7 +68,6 @@ function drawSlots() {
   });
 }
 
-
 function drawBall(ball) {
   ctx.fillStyle = "white";
   ctx.beginPath();
@@ -79,12 +75,10 @@ function drawBall(ball) {
   ctx.fill();
 }
 
-
 function updateBall(ball, index) {
   ball.vy += gravity;
   ball.x += ball.vx;
   ball.y += ball.vy;
-
 
   pegs.forEach((peg) => {
     const dx = ball.x - peg.x;
@@ -97,42 +91,34 @@ function updateBall(ball, index) {
     }
   });
 
-
   if (ball.x - ballRadius < 0 || ball.x + ballRadius > canvas.width) {
     ball.vx *= -1;
   }
 
   if (ball.y + ballRadius > canvas.height - 30) {
     const slotIndex = Math.floor(ball.x / (canvas.width / slotCount));
-    const multiplier = slots[slotIndex].multiplier;
-
- 
-    score += multiplier;
+    score += Math.floor(multipliers[slotIndex] * 10);
     updateScore();
     balls.splice(index, 1);
   }
 }
 
-
 function updateScore() {
   document.getElementById("score").textContent = score;
 }
-
 
 function dropBall() {
   if (score > 0) {
     score -= 1;
     updateScore();
-    const ball = {
+    balls.push({
       x: canvas.width / 2,
       y: ballRadius,
       vx: (Math.random() - 0.5) * 2,
       vy: 0
-    };
-    balls.push(ball);
+    });
   }
 }
-
 
 function update() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -145,31 +131,8 @@ function update() {
   requestAnimationFrame(update);
 }
 
-const multipliers = [0.5, 1, 1, 1.2, 1.2, 1.4, 1.4, 2, 3, 4, 2, 1.4, 1.4, 1.2, 1.2, 1, 1, 0.5];
-
-
-const updateMultipliers = () => {
-  for (let i = 0; i < multipliers.length; i++) {
-    let slotLabel = document.querySelector(`#slot-${i} .multiplier`);
-    slotLabel.textContent = `${multipliers[i]}x`;
-  }
-};
-
-
-const calculateScore = (ball) => {
-  const slotIndex = Math.floor(ball.x / slotWidth); 
-  if (slotIndex >= 0 && slotIndex < multipliers.length) {
-    const earned = Math.floor(multipliers[slotIndex] * 10);
-    score += earned;
-    updateScoreDisplay();
-  }
-};
-
-
-
 setupPegs();
 setupSlots();
 update();
-
-
 document.getElementById("dropBall").addEventListener("click", dropBall);
+
