@@ -145,6 +145,27 @@ function update() {
   requestAnimationFrame(update);
 }
 
+const multipliers = [0.5, 1, 1, 1.2, 1.2, 1.4, 1.4, 2, 3, 4, 2, 1.4, 1.4, 1.2, 1.2, 1, 1, 0.5];
+
+
+const updateMultipliers = () => {
+  for (let i = 0; i < multipliers.length; i++) {
+    let slotLabel = document.querySelector(`#slot-${i} .multiplier`);
+    slotLabel.textContent = `${multipliers[i]}x`;
+  }
+};
+
+
+const calculateScore = (ball) => {
+  const slotIndex = Math.floor(ball.x / slotWidth); 
+  if (slotIndex >= 0 && slotIndex < multipliers.length) {
+    const earned = Math.floor(multipliers[slotIndex] * 10);
+    score += earned;
+    updateScoreDisplay();
+  }
+};
+
+
 
 setupPegs();
 setupSlots();
