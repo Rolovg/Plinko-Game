@@ -34,8 +34,6 @@ p {
 }
 
 canvas {
-  width: 400px;
-  height: 600px;
   border: 3px solid #222;
   border-radius: 8px;
   background-color: #f7f7f7;
@@ -65,3 +63,4 @@ button:hover {
   font-weight: bold;
   color: yellow;
 }
+
