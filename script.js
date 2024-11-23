@@ -11,10 +11,30 @@ const ballRadius = 8;
 const pegRadius = 5;
 const gravity = 0.2;
 const bounceFactor = 0.6;
-const slotCount = 10;
+const slotCount = 9; 
 let score = 100;
 
-const multipliers = [0.5, 1, 1.5, 2, 3, 4, 3, 2, 1.5, 1];
+function generateMultipliers() {
+  const center = Math.floor(slotCount / 2);
+  const multipliers = [];
+  for (let i = 0; i < slotCount; i++) {
+    const distanceFromCenter = Math.abs(center - i);
+    if (distanceFromCenter === 0) {
+      multipliers.push(0.2); // Loss multiplier at the center
+    } else if (distanceFromCenter === 1) {
+      multipliers.push(0.5); // Slight loss near the center
+    } else if (distanceFromCenter === 2) {
+      multipliers.push(1); // Break even
+    } else if (distanceFromCenter === 3) {
+      multipliers.push(2); // Small win
+    } else {
+      multipliers.push(4); // Big win at the edges
+    }
+  }
+  return multipliers;
+}
+
+const multipliers = generateMultipliers();
 
 function setupPegs() {
   const rows = 12;
@@ -48,7 +68,7 @@ function setupSlots() {
     slots.push({
       x: i * slotWidth,
       width: slotWidth,
-      multiplier: multipliers[i]
+      multiplier: multipliers[i],
     });
   }
 }
@@ -97,7 +117,8 @@ function updateBall(ball, index) {
 
   if (ball.y + ballRadius > canvas.height - 30) {
     const slotIndex = Math.floor(ball.x / (canvas.width / slotCount));
-    score += Math.floor(multipliers[slotIndex] * 10);
+    const earned = Math.floor(multipliers[slotIndex] * 10);
+    score += earned - 10; // Subtract the ball cost (1 point = 10)
     updateScore();
     balls.splice(index, 1);
   }
@@ -108,14 +129,14 @@ function updateScore() {
 }
 
 function dropBall() {
-  if (score > 0) {
-    score -= 1;
+  if (score >= 10) {
+    score -= 10; // Cost of dropping a ball
     updateScore();
     balls.push({
       x: canvas.width / 2,
       y: ballRadius,
       vx: (Math.random() - 0.5) * 2,
-      vy: 0
+      vy: 0,
     });
   }
 }
@@ -135,4 +156,5 @@ setupPegs();
 setupSlots();
 update();
 document.getElementById("dropBall").addEventListener("click", dropBall);
+
 
