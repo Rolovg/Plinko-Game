@@ -1,8 +1,8 @@
 const canvas = document.getElementById("plinkoCanvas");
 const ctx = canvas.getContext("2d");
 
-canvas.width = 450;
-canvas.height = 600; 
+canvas.width = 450; // Adjusted to fit the container width
+canvas.height = 600; // Slightly taller for better gameplay visibility
 
 const pegs = [];
 const balls = [];
@@ -11,7 +11,7 @@ const ballRadius = 8;
 const pegRadius = 5;
 const gravity = 0.2;
 const bounceFactor = 0.6;
-const slotCount = 9; 
+const slotCount = 9; // Must be odd for symmetry
 let score = 100;
 
 function generateMultipliers() {
@@ -20,15 +20,15 @@ function generateMultipliers() {
   for (let i = 0; i < slotCount; i++) {
     const distanceFromCenter = Math.abs(center - i);
     if (distanceFromCenter === 0) {
-      multipliers.push(0.2); 
+      multipliers.push(0.5); // Loss at the center
     } else if (distanceFromCenter === 1) {
-      multipliers.push(0.5); 
+      multipliers.push(1); // Break even near the center
     } else if (distanceFromCenter === 2) {
-      multipliers.push(1); 
+      multipliers.push(2); // Small win
     } else if (distanceFromCenter === 3) {
-      multipliers.push(2); 
+      multipliers.push(3); // Moderate win
     } else {
-      multipliers.push(4); 
+      multipliers.push(4); // Big win at the edges
     }
   }
   return multipliers;
@@ -118,7 +118,7 @@ function updateBall(ball, index) {
   if (ball.y + ballRadius > canvas.height - 30) {
     const slotIndex = Math.floor(ball.x / (canvas.width / slotCount));
     const earned = Math.floor(multipliers[slotIndex] * 1);
-    score += earned - 1; 
+    score += earned - 1; // Subtract the ball cost
     updateScore();
     balls.splice(index, 1);
   }
@@ -130,7 +130,7 @@ function updateScore() {
 
 function dropBall() {
   if (score >= 1) {
-    score -= 1; 
+    score -= 1; // Each ball costs 1 point
     updateScore();
     balls.push({
       x: canvas.width / 2,
@@ -138,6 +138,12 @@ function dropBall() {
       vx: (Math.random() - 0.5) * 2,
       vy: 0,
     });
+  }
+}
+
+function handleKeyPress(event) {
+  if (event.code === "Space") {
+    dropBall();
   }
 }
 
@@ -157,4 +163,4 @@ setupSlots();
 update();
 
 document.getElementById("dropBall").addEventListener("click", dropBall);
-
+document.addEventListener("keydown", handleKeyPress);
