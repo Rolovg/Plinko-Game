@@ -1,8 +1,8 @@
 const canvas = document.getElementById("plinkoCanvas");
 const ctx = canvas.getContext("2d");
 
-canvas.width = 450; // Adjusted to fit the container width
-canvas.height = 600; // Slightly taller for better gameplay visibility
+canvas.width = 450; 
+canvas.height = 600; 
 
 const pegs = [];
 const balls = [];
@@ -11,7 +11,7 @@ const ballRadius = 8;
 const pegRadius = 5;
 const gravity = 0.2;
 const bounceFactor = 0.6;
-const slotCount = 9; // Must be odd for symmetry
+const slotCount = 9; 
 let score = 100;
 
 function generateMultipliers() {
@@ -20,15 +20,15 @@ function generateMultipliers() {
   for (let i = 0; i < slotCount; i++) {
     const distanceFromCenter = Math.abs(center - i);
     if (distanceFromCenter === 0) {
-      multipliers.push(0.5); // Loss at the center
+      multipliers.push(0.5); 
     } else if (distanceFromCenter === 1) {
-      multipliers.push(1); // Break even near the center
+      multipliers.push(1); 
     } else if (distanceFromCenter === 2) {
-      multipliers.push(2); // Small win
+      multipliers.push(2); 
     } else if (distanceFromCenter === 3) {
-      multipliers.push(3); // Moderate win
+      multipliers.push(3); 
     } else {
-      multipliers.push(4); // Big win at the edges
+      multipliers.push(4); 
     }
   }
   return multipliers;
@@ -118,7 +118,7 @@ function updateBall(ball, index) {
   if (ball.y + ballRadius > canvas.height - 30) {
     const slotIndex = Math.floor(ball.x / (canvas.width / slotCount));
     const earned = Math.floor(multipliers[slotIndex] * 1);
-    score += earned - 1; // Subtract the ball cost
+    score += earned - 1; 
     updateScore();
     balls.splice(index, 1);
   }
@@ -130,7 +130,7 @@ function updateScore() {
 
 function dropBall() {
   if (score >= 1) {
-    score -= 1; // Each ball costs 1 point
+    score -= 1; 
     updateScore();
     balls.push({
       x: canvas.width / 2,
