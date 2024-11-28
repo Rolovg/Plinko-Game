@@ -7,16 +7,21 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div id="game-container">
-    <h1>Plinko Game</h1>
-    <p>Click the button or press the space bar to drop a ball!</p>
-    <div id="game">
-      <canvas id="plinkoCanvas"></canvas>
-      <button id="dropBall">Drop Ball</button>
-      <p>Score: <span id="score">100</span></p>
+  <div id="main-container">
+    <div id="game-container">
+      <h1>Plinko Game</h1>
+      <p>Click the button or press the space bar to drop a ball!</p>
+      <div id="game">
+        <canvas id="plinkoCanvas"></canvas>
+        <button id="dropBall">Drop Ball</button>
+        <p>Score: <span id="score">100</span></p>
+      </div>
+    </div>
+    <div id="stats-container">
+      <h2>Stats</h2>
+      <ul id="stats-list"></ul>
     </div>
   </div>
   <script src="script.js"></script>
 </body>
 </html>
-
