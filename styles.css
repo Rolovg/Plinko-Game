@@ -14,6 +14,12 @@ body {
   color: white;
 }
 
+#main-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
 #game-container {
   text-align: center;
   width: 500px;
@@ -21,18 +27,19 @@ body {
   border-radius: 10px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
   padding: 20px;
-  overflow: hidden; 
 }
 
-h1 {
-  font-size: 24px;
-  margin-bottom: 10px;
+#stats-container {
+  width: 250px;
+  background-color: #10101b;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+  padding: 20px;
+}
+
+h1, h2 {
   color: #f39c12;
-}
-
-#game p {
-  font-size: 16px;
-  margin: 10px 0;
+  margin-bottom: 10px;
 }
 
 #plinkoCanvas {
@@ -57,6 +64,18 @@ h1 {
   transition: background-color 0.3s ease;
 }
 
+#dropBall:hover {
+  background-color: #e67e22;
+}
+
+#stats-list {
+  list-style: none;
+  font-size: 14px;
+}
+
+#stats-list li {
+  margin-bottom: 5px;
+}
 #dropBall:hover {
   background-color: #e67e22;
 }
