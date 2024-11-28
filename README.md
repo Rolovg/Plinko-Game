@@ -1,3 +1,3 @@
 # Plinko-Game
 
-Simple version of Plinko Game created with HTML, CSS and JAVASCRIPT.
+Simple Project based of Plinko Game created with HTML, CSS and JAVASCRIPT.
