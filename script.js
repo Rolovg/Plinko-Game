@@ -2,7 +2,7 @@ const canvas = document.getElementById("plinkoCanvas");
 const ctx = canvas.getContext("2d");
 
 canvas.width = 450; 
-canvas.height = 600; 
+canvas.height = 600;
 
 const pegs = [];
 const balls = [];
@@ -13,6 +13,9 @@ const gravity = 0.2;
 const bounceFactor = 0.6;
 const slotCount = 9; 
 let score = 100;
+
+const stats = new Array(slotCount).fill(0); 
+let totalBalls = 0; 
 
 function generateMultipliers() {
   const center = Math.floor(slotCount / 2);
@@ -117,6 +120,9 @@ function updateBall(ball, index) {
 
   if (ball.y + ballRadius > canvas.height - 30) {
     const slotIndex = Math.floor(ball.x / (canvas.width / slotCount));
+    stats[slotIndex] += 1;
+    totalBalls += 1;
+    updateStats();
     const earned = Math.floor(multipliers[slotIndex] * 1);
     score += earned - 1; 
     updateScore();
@@ -126,6 +132,17 @@ function updateBall(ball, index) {
 
 function updateScore() {
   document.getElementById("score").textContent = score;
+}
+
+function updateStats() {
+  const statsList = document.getElementById("stats-list");
+  statsList.innerHTML = "";
+  stats.forEach((count, index) => {
+    const percentage = totalBalls > 0 ? ((count / totalBalls) * 100).toFixed(2) : 0;
+    const li = document.createElement("li");
+    li.textContent = `Multiplier ${multipliers[index]}x: ${percentage}%`;
+    statsList.appendChild(li);
+  });
 }
 
 function dropBall() {
@@ -151,16 +168,14 @@ function update() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawPegs();
   drawSlots();
-  balls.forEach((ball, i) => {
-    updateBall(ball, i);
-    drawBall(ball);
-  });
+  balls.forEach(updateBall);
+  balls.forEach(drawBall);
   requestAnimationFrame(update);
 }
 
 setupPegs();
 setupSlots();
+document.getElementById("dropBall").addEventListener("click", dropBall);
+window.addEventListener("keypress", handleKeyPress);
 update();
 
-document.getElementById("dropBall").addEventListener("click", dropBall);
-document.addEventListener("keydown", handleKeyPress);
